@@ -8,12 +8,17 @@
     <style>
         :root { --bg: #f4f4f9; --text: #333; --active: #4caf50; --inactive: #f44336; }
         body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background: var(--bg); color: var(--text); transition: background 0.3s; }
-        .card { background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; width: 80%; max-width: 300px; }
+        .card { background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; width: 80%; max-width: 300px; position: relative; transition: all 0.3s; }
+        .card.collapsed { padding: 1rem; max-width: 200px; }
+        .collapse-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text); width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background 0.2s; }
+        .collapse-btn:hover { background: rgba(0,0,0,0.1); }
         button { font-size: 1.2rem; padding: 1rem 2rem; border: none; border-radius: 50px; cursor: pointer; color: white; transition: transform 0.1s; width: 100%; }
         button:active { transform: scale(0.98); }
+        .card.collapsed button { font-size: 1rem; padding: 0.5rem 1rem; }
         .on { background-color: var(--active); }
         .off { background-color: var(--inactive); }
         .timer-group { margin-top: 1.5rem; }
+        .card.collapsed .timer-group, .card.collapsed #status-text { display: none; }
         input { width: 60px; padding: 5px; border-radius: 4px; border: 1px solid #ccc; text-align: center; }
         #status-text { margin-bottom: 1rem; font-weight: bold; }
     </style>
@@ -21,6 +26,7 @@
 <body>
 
     <div class="card">
+        <button id="collapseBtn" class="collapse-btn">−</button>
         <div id="status-text">Screen Lock: INACTIVE</div>
         <button id="toggleBtn" class="off">Enable StayAwake</button>
         
