@@ -73,3 +73,44 @@ document.addEventListener('visibilitychange', async () => {
         console.log("Wake Lock re-acquired in split view.");
     }
 });
+
+// iOS PiP Logic
+const pipVideo = document.getElementById('pipVideo');
+const iphoneBtn = document.getElementById('iphoneBtn');
+
+// 1. Show the iPhone button only if on iOS
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+if (isIOS) {
+    iphoneBtn.style.display = "block";
+}
+
+// 2. PiP Logic
+iphoneBtn.addEventListener('click', async () => {
+    try {
+        if (document.pictureInPictureElement) {
+            // If already in PiP, exit it
+            await document.exitPictureInPicture();
+            iphoneBtn.innerText = "iPhone Background Mode (PiP)";
+        } else {
+            // Start video and request PiP
+            await pipVideo.play();
+            await pipVideo.requestPictureInPicture();
+            iphoneBtn.innerText = "Disable PiP Mode";
+        }
+    } catch (error) {
+        console.error("PiP failed:", error);
+        alert("To keep iPhone awake in background, please allow Picture-in-Picture.");
+    }
+});
+
+// 3. Keep the "StayAwake" status synced
+pipVideo.addEventListener('enterpictureinpicture', () => {
+    statusText.innerText = "Status: PIP ACTIVE (Background OK)";
+    toggleBtn.className = "on";
+});
+
+pipVideo.addEventListener('leavepictureinpicture', () => {
+    statusText.innerText = "Status: INACTIVE";
+    toggleBtn.className = "off";
+    pipVideo.pause();
+});

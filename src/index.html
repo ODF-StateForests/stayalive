@@ -69,10 +69,16 @@
 <body>
 
     <div class="card">
+        <video id="pipVideo" src="silent.mp4" loop muted playsinline style="display:none;"></video>
+
         <div id="status-text">Screen Lock: INACTIVE</div>
         <button id="toggleBtn" class="off">Enable StayAwake</button>
         <button id="compactBtn">
             Toggle Compact Mode
+        </button>
+        <!-- Add this button to your card (you can hide it on Android via JS) -->
+        <button id="iphoneBtn" style="margin-top: 10px; background: #007aff; display: none;">
+            iPhone Background Mode (PiP)
         </button>
         <div class="timer-group">
             <label>Max Time (mins): </label>
