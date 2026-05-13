@@ -56,9 +56,20 @@ toggleBtn.addEventListener('click', () => {
     }
 });
 
-// Re-acquire lock if page becomes visible again
+const compactBtn = document.getElementById('compactBtn');
+
+compactBtn.addEventListener('click', () => {
+    document.body.classList.toggle('compact');
+    compactBtn.innerText = document.body.classList.contains('compact') 
+        ? "Exit Compact" 
+        : "Toggle Compact Mode";
+});
+
+// CRITICAL: Ensure the lock re-activates when the user interacts 
+// with the split-screen window.
 document.addEventListener('visibilitychange', async () => {
     if (wakeLock !== null && document.visibilityState === 'visible') {
         await requestWakeLock();
+        console.log("Wake Lock re-acquired in split view.");
     }
 });
