@@ -2,9 +2,9 @@ let wakeLock = null;
 let timerTimeout = null;
 
 const toggleBtn = document.getElementById('toggleBtn');
+const compactBtn = document.getElementById('compactBtn');
 const statusText = document.getElementById('status-text');
 const maxTimeInput = document.getElementById('maxTime');
-const collapseBtn = document.getElementById('collapseBtn');
 const card = document.querySelector('.card');
 
 // Function to request the Wake Lock
@@ -58,8 +58,6 @@ toggleBtn.addEventListener('click', () => {
     }
 });
 
-const compactBtn = document.getElementById('compactBtn');
-
 compactBtn.addEventListener('click', () => {
     document.body.classList.toggle('compact');
     compactBtn.innerText = document.body.classList.contains('compact') 
@@ -75,16 +73,3 @@ document.addEventListener('visibilitychange', async () => {
         console.log("Wake Lock re-acquired in split view.");
     }
 });
-
-// Collapse/Expand functionality
-collapseBtn.addEventListener('click', () => {
-    card.classList.toggle('collapsed');
-    collapseBtn.innerText = card.classList.contains('collapsed') ? '+' : '−';
-    localStorage.setItem('collapsed', card.classList.contains('collapsed'));
-});
-
-// Load collapsed state on page load
-if (localStorage.getItem('collapsed') === 'true') {
-    card.classList.add('collapsed');
-    collapseBtn.innerText = '+';
-}
