@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayAwake PWA</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        :root { --bg: #f4f4f9; --text: #333; --active: #4caf50; --inactive: #f44336; }
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background: var(--bg); color: var(--text); transition: background 0.3s; }
+        .card { background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; width: 80%; max-width: 300px; }
+        button { font-size: 1.2rem; padding: 1rem 2rem; border: none; border-radius: 50px; cursor: pointer; color: white; transition: transform 0.1s; width: 100%; }
+        button:active { transform: scale(0.98); }
+        .on { background-color: var(--active); }
+        .off { background-color: var(--inactive); }
+        .timer-group { margin-top: 1.5rem; }
+        input { width: 60px; padding: 5px; border-radius: 4px; border: 1px solid #ccc; text-align: center; }
+        #status-text { margin-bottom: 1rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div id="status-text">Screen Lock: INACTIVE</div>
+        <button id="toggleBtn" class="off">Enable StayAwake</button>
+        
+        <div class="timer-group">
+            <label>Max Time (mins): </label>
+            <input type="number" id="maxTime" value="30" min="1">
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
