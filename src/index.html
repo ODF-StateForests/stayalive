@@ -69,7 +69,7 @@
 <body>
 
     <div class="card">
-        <video id="pipVideo" src="silent.mp4" loop muted playsinline style="display:none;"></video>
+        <video id="pipVideo" src="silent.mp4" loop muted playsinline preload="auto" style="position:absolute; width:1px; height:1px; opacity:0; pointer-events:none;"></video>
 
         <div id="status-text">Screen Lock: INACTIVE</div>
         <button id="toggleBtn" class="off">Enable StayAwake</button>

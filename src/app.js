@@ -78,25 +78,39 @@ document.addEventListener('visibilitychange', async () => {
 const pipVideo = document.getElementById('pipVideo');
 const iphoneBtn = document.getElementById('iphoneBtn');
 
-// 1. Show the iPhone button only if on iOS
+const supportsStandardPiP = 'requestPictureInPicture' in HTMLVideoElement.prototype;
+const supportsWebkitPiP = 'webkitSetPresentationMode' in HTMLVideoElement.prototype;
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-if (isIOS) {
+const pipAvailable = isIOS && (supportsStandardPiP || supportsWebkitPiP);
+
+if (pipAvailable) {
     iphoneBtn.style.display = "block";
 }
 
 // 2. PiP Logic
 iphoneBtn.addEventListener('click', async () => {
     try {
-        if (document.pictureInPictureElement) {
-            // If already in PiP, exit it
-            await document.exitPictureInPicture();
+        const alreadyInPiP = document.pictureInPictureElement || pipVideo.webkitPresentationMode === 'picture-in-picture';
+
+        if (alreadyInPiP) {
+            if (document.exitPictureInPicture) {
+                await document.exitPictureInPicture();
+            } else if (supportsWebkitPiP) {
+                pipVideo.webkitSetPresentationMode('inline');
+            }
             iphoneBtn.innerText = "iPhone Background Mode (PiP)";
         } else {
-            // Start video and request PiP
-            // alert("Swipe up from the bottom of the screen to enter Picture-in-Picture mode.");
-            alert("Entering PiP mode'");
+            alert("Swipe up from the bottom of the screen to enter Picture-in-Picture mode.");
             await pipVideo.play();
-            await pipVideo.requestPictureInPicture();
+
+            if (supportsStandardPiP) {
+                await pipVideo.requestPictureInPicture();
+            } else if (supportsWebkitPiP) {
+                pipVideo.webkitSetPresentationMode('picture-in-picture');
+            } else {
+                throw new Error('Picture-in-Picture is unsupported in this browser.');
+            }
+
             iphoneBtn.innerText = "Disable PiP Mode";
         }
     } catch (error) {
@@ -109,6 +123,19 @@ iphoneBtn.addEventListener('click', async () => {
 pipVideo.addEventListener('enterpictureinpicture', () => {
     statusText.innerText = "Status: PIP ACTIVE (Background OK)";
     toggleBtn.className = "on";
+});
+
+pipVideo.addEventListener('webkitpresentationmodechanged', () => {
+    if (pipVideo.webkitPresentationMode === 'picture-in-picture') {
+        statusText.innerText = "Status: PIP ACTIVE (Background OK)";
+        toggleBtn.className = "on";
+        iphoneBtn.innerText = "Disable PiP Mode";
+    } else {
+        statusText.innerText = "Status: INACTIVE";
+        toggleBtn.className = "off";
+        iphoneBtn.innerText = "iPhone Background Mode (PiP)";
+        pipVideo.pause();
+    }
 });
 
 pipVideo.addEventListener('leavepictureinpicture', () => {
