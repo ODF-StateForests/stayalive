@@ -93,6 +93,8 @@ iphoneBtn.addEventListener('click', async () => {
             iphoneBtn.innerText = "iPhone Background Mode (PiP)";
         } else {
             // Start video and request PiP
+            // alert("Swipe up from the bottom of the screen to enter Picture-in-Picture mode.");
+            alert("Entering PiP mode'");
             await pipVideo.play();
             await pipVideo.requestPictureInPicture();
             iphoneBtn.innerText = "Disable PiP Mode";
